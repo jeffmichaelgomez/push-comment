@@ -16706,7 +16706,7 @@ var require_github2 = __commonJS({
       return commentId;
     }
     async function createPrComment2(repoToken, markupData, updateCommentIfOneExists2) {
-      if (github.context.eventName != 'pull_request') {
+      if (github.context.eventName != 'push') {
         core2.info('This event was not triggered by a pull_request.  No comment will be created or updated.');
         return;
       }
@@ -19962,8 +19962,7 @@ ${getTestResultsMarkup(jsonResults.failures, reportName2)}
       const passedCount = totalCount - failedCount;
       const badgeCountText = failedCount > 0 ? `${failedCount}/${totalCount}` : `${passedCount}/${totalCount}`;
       const badgeStatusText = failedCount > 0 ? 'FAILED' : 'PASSED';
-      const badgeColor = failedCount > 0 ? 'red' : 'brightgreen';
-      return `![Generic badge](https://img.shields.io/badge/${name}_${badgeCountText}-${badgeStatusText}-${badgeColor}.svg)`;
+      return `${name}_${badgeCountText}-${badgeStatusText}`;
     }
     function formatDate(dateToFormat) {
       if (timezone && timezone.length > 0) {
@@ -20087,6 +20086,7 @@ var shouldCreateStatusCheck = core.getBooleanInput('create-status-check');
 var shouldCreatePRComment = core.getBooleanInput('create-pr-comment');
 var updateCommentIfOneExists = core.getBooleanInput('update-comment-if-one-exists');
 var reportName = core.getInput('report-name');
+var deploymentBranch = core.getInput('deployment-branch');
 async function run() {
   try {
     const resultsJson = await readJsonResultsFromFile(resultsFile);
@@ -20106,7 +20106,7 @@ async function run() {
       await createStatusCheck(token, markupData, conclusion, reportName);
     }
     if (shouldCreatePRComment) {
-      await createPrComment(token, markupData, updateCommentIfOneExists);
+      await createPrComment(token, markupData, updateCommentIfOneExists, deploymentBranch);
     }
     core.setOutput('test-outcome', resultsJson.outcome);
   } catch (error) {
