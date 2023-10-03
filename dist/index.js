@@ -16706,7 +16706,7 @@ var require_github2 = __commonJS({
       return commentId;
     }
     async function createPrComment2(repoToken, markupData, updateCommentIfOneExists2) {
-      if (github.context.eventName != 'push') {
+      if (github.context.eventName != 'pull_request') {
         core2.info('This event was not triggered by a pull_request.  No comment will be created or updated.');
         return;
       }
