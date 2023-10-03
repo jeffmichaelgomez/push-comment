@@ -67,7 +67,7 @@ async function lookForExistingComment(octokit) {
 }
 
 async function createPrComment(repoToken, markupData, updateCommentIfOneExists) {
-  if (github.context.eventName != 'pull_request') {
+  if (github.context.eventName != 'push') {
     core.info('This event was not triggered by a pull_request.  No comment will be created or updated.');
     return;
   }

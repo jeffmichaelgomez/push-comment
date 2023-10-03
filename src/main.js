@@ -15,6 +15,7 @@ const shouldCreateStatusCheck = core.getBooleanInput('create-status-check');
 const shouldCreatePRComment = core.getBooleanInput('create-pr-comment');
 const updateCommentIfOneExists = core.getBooleanInput('update-comment-if-one-exists');
 const reportName = core.getInput('report-name');
+const deploymentBranch = core.getInput('deployment-branch');
 
 async function run() {
   try {
@@ -38,7 +39,7 @@ async function run() {
       await createStatusCheck(token, markupData, conclusion, reportName);
     }
     if (shouldCreatePRComment) {
-      await createPrComment(token, markupData, updateCommentIfOneExists);
+      await createPrComment(token, markupData, updateCommentIfOneExists, deploymentBranch);
     }
 
     core.setOutput('test-outcome', resultsJson.outcome);
